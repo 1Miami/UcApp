@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
-import { ImageSourcePropType } from "react-native";
+import { ImageSourcePropType, TouchableOpacity } from "react-native";
 
 const Card = styled.View`
-  background-color: #fff;
+  background-color: #e2e97e;
   border-radius: 10px;
   padding: 20px;
   margin: 10px;
@@ -28,23 +28,40 @@ const Description = styled.Text`
   color: #666;
 `;
 
+const AdditionalInfo = styled.Text`
+  font-size: 15.5px;
+  color: #333;
+  margin-top: 10px;
+`;
+
 interface ProfileCardProps {
   name: string;
   description: string;
   image: ImageSourcePropType;
+  additionalInfo: string;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   name,
   description,
   image,
+  additionalInfo,
 }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const handlePress = () => {
+    setExpanded(!expanded);
+  };
+
   return (
-    <Card>
-      <ProfileImage source={image} />
-      <Name>{name}</Name>
-      <Description>{description}</Description>
-    </Card>
+    <TouchableOpacity onPress={handlePress}>
+      <Card>
+        <ProfileImage source={image} />
+        <Name>{name}</Name>
+        <Description>{description}</Description>
+        {expanded && <AdditionalInfo>{additionalInfo}</AdditionalInfo>}
+      </Card>
+    </TouchableOpacity>
   );
 };
 
