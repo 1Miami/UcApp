@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 const Container = styled.View`
-  background-color: #f8f8f8;
+  background-color: #706b6b;
   padding: 10px;
   align-items: center;
 `;
