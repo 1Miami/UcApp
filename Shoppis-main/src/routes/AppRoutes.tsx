@@ -22,13 +22,14 @@
           }}
         />
         <Stack.Screen
-          name="Details"
-          component={Details}
-          options={{
-            headerTitle: "Detalhes",
-            headerRight: () => <MenuHeader />,
-          }}
-        />
+  name="Details"
+  component={Details}
+  options={{
+    headerTitle: "Detalhes",
+    headerRight: () => <MenuHeader />,
+  }}
+/>
+
         <Stack.Screen
           name="Cart"
           component={Cart}
