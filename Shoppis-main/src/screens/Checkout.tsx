@@ -1,59 +1,153 @@
-// src/screens/Checkout.tsx
-import { StyleSheet, Text, View, FlatList, Button } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Button,
+  Divider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+} from "@mui/material";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types/RootStackParamList"; // Certifique-se de que o tipo RootStackParamList está correto
-// src/screens/Checkout.tsx
-import { ICartItem } from "../types/Products"; // Atualize o caminho conforme necessário
+import { RootStackParamList } from "../types/RootStackParamList";
+import { ICartItem } from "../types/Products";
 
-
-// Defina o tipo das props com NativeStackScreenProps
 type CheckoutProps = NativeStackScreenProps<RootStackParamList, "Checkout">;
 
 const Checkout: React.FC<CheckoutProps> = ({ route, navigation }) => {
-  const { cartItems, totalAmount } = route.params;
+  const [cartItems, setCartItems] = useState<ICartItem[]>(route.params.cartItems);
+  const [totalAmount, setTotalAmount] = useState(route.params.totalAmount);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("credit");
+
+  const handleOpenPaymentDialog = () => {
+    setPaymentDialogOpen(true);
+  };
+
+  const handleClosePaymentDialog = () => {
+    setPaymentDialogOpen(false);
+  };
+
+  const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const handleConfirmPayment = () => {
+    setCartItems([]);
+    setTotalAmount(0);
+    setPaymentDialogOpen(false);
+    setConfirmationDialogOpen(true);
+  };
+
+  const handleCloseConfirmationDialog = () => {
+    setConfirmationDialogOpen(false);
+    navigation.navigate("Menu"); // Redireciona para a tela do Menu
+  };
 
   return (
-    <View style={styles.container}>
-      <Button title="Back to Menu" onPress={() => navigation.goBack()} />
-      <Text style={styles.title}>Checkout</Text>
-      <FlatList
-        data={cartItems}
-        keyExtractor={(item) => item.product.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>
-              {item.product.title} x {item.quantity}
-            </Text>
-            <Text>${(item.product.price * item.quantity).toFixed(2)}</Text>
-          </View>
-        )}
-      />
-      <Text style={styles.total}>Total Amount: ${totalAmount.toFixed(2)}</Text>
-      {/* Aqui você pode adicionar mais componentes, como botões de pagamento */}
-    </View>
+    <Container maxWidth="sm" sx={{ padding: 3 }}>
+      <Button variant="outlined" color="primary" onClick={() => navigation.goBack()}>
+        Back to Menu
+      </Button>
+
+      <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 2, fontWeight: "bold" }}>
+        Checkout
+      </Typography>
+
+      <List>
+        {cartItems.map((item: ICartItem) => (
+          <React.Fragment key={item.product.id}>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar
+                  variant="rounded"
+                  src={item.product.images[0]}
+                  alt={item.product.title}
+                  sx={{ width: 56, height: 56 }}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`${item.product.title} x ${item.quantity}`}
+                secondary={`$${(item.product.price * item.quantity).toFixed(2)}`}
+              />
+            </ListItem>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </List>
+
+      <Typography variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
+        Total Amount: ${totalAmount.toFixed(2)}
+      </Typography>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleOpenPaymentDialog}
+        sx={{ mt: 2 }}
+      >
+        Proceed to Payment
+      </Button>
+
+      {/* Dialog de Pagamento */}
+      <Dialog open={paymentDialogOpen} onClose={handleClosePaymentDialog}>
+        <DialogTitle>Escolha o método de pagamento</DialogTitle>
+        <DialogContent>
+          <FormControl component="fieldset">
+            <RadioGroup
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
+            >
+              <FormControlLabel
+                value="credit"
+                control={<Radio />}
+                label="Cartão de Crédito"
+              />
+              <FormControlLabel
+                value="debit"
+                control={<Radio />}
+                label="Cartão de Débito"
+              />
+            </RadioGroup>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePaymentDialog} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleConfirmPayment} color="primary">
+            Confirmar Pagamento
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Pop-up de Confirmação de Compra */}
+      <Dialog open={confirmationDialogOpen} onClose={handleCloseConfirmationDialog}>
+        <DialogTitle>Compra Concluída</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Sua compra foi realizada com sucesso!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmationDialog} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
 export default Checkout;
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  item: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-  },
-  total: {
-    marginTop: 20,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
