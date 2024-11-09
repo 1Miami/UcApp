@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ICartItem, ProductDTO } from "../types/Products";
 import { showError } from "../components/Toast";
@@ -8,6 +8,7 @@ type CartContextProps = {
   getCart: () => Promise<void>;
   addProduct: (product: ProductDTO) => void;
   removeProduct: (id: number) => void;
+  clearCart: () => void;
 };
 
 type CartProviderProps = {
@@ -18,6 +19,10 @@ export const CartContext = createContext<CartContextProps>({} as CartContextProp
 
 export const CartContextProvider = ({ children }: CartProviderProps) => {
   const [cart, setCart] = useState<ICartItem[]>([]);
+
+  useEffect(() => {
+    getCart(); // Recupera o carrinho ao inicializar o contexto
+  }, []);
 
   const storeCart = async (value: ICartItem[]) => {
     try {
@@ -79,8 +84,13 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     }
   };
 
+  const clearCart = () => {
+    setCart([]); // Limpa o carrinho
+    storeCart([]); // Salva o carrinho vazio no AsyncStorage
+  };
+
   return (
-    <CartContext.Provider value={{ cart, getCart, addProduct, removeProduct }}>
+    <CartContext.Provider value={{ cart, getCart, addProduct, removeProduct, clearCart }}>
       {children}
     </CartContext.Provider>
   );
