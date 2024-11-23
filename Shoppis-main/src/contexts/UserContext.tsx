@@ -38,7 +38,6 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
   const getToken = async () => {
     try {
       const value = await AsyncStorage.getItem("@token");
-
       if (value !== null) {
         setToken(value);
       }
@@ -50,7 +49,6 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
   const storeUser = async (value: UserDTO) => {
     try {
       const jsonValue = JSON.stringify(value);
-
       await AsyncStorage.setItem("@user", jsonValue);
     } catch (error) {
       showError("Não foi possível salvar os dados do usuário");
@@ -61,7 +59,6 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
     try {
       const jsonValue = await AsyncStorage.getItem("@user");
       const userData = jsonValue !== null ? JSON.parse(jsonValue) : null;
-
       setUser(userData);
     } catch (error) {
       showError("Não foi possível recuperar o usuário");
@@ -70,7 +67,7 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const url = "https://dummyjson.com/auth/login";
+      const url = "https://www.melivecode.com/api/login";
 
       const response = await axios.post<UserDTO>(url, {
         username,
@@ -87,10 +84,13 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem("@token");
-    await AsyncStorage.removeItem("@user");
-    setToken("");
-    await AsyncStorage.removeItem("@cart");
+    try {
+      await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem("@user");
+      setToken("");
+    } catch (error) {
+      showError("Erro ao realizar o logout");
+    }
   };
 
   return (

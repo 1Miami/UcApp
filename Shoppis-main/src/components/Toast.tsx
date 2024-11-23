@@ -12,7 +12,7 @@ const defaultOptions = {
 
 export const showError = (message: string) => {
   defaultOptions.backgroundColor = "#cc0000";
-
+// aasdasd
   Toast.show(message, defaultOptions);
 };
 

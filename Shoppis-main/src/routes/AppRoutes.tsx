@@ -4,13 +4,15 @@ import Menu from '../screens/Menu';
 import ProductDetails from '../screens/ProductDetails'; // Altere se necessário
 import Cart from '../screens/Cart';
 import Checkout from '../screens/Checkout';
+import Login from '../screens/Login';
 import { RootStackParamList } from '../types/RootStackParamList';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppRoutes = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name='Login' component={Login}/>
       <Stack.Screen name="Menu" component={Menu} />
       <Stack.Screen name="Details" component={ProductDetails} />
       <Stack.Screen name="Cart" component={Cart} />

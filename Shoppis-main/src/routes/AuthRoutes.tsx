@@ -1,12 +1,16 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../screens/Login";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Login from "../screens/Login"; // Ajuste o caminho conforme necessário
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-export const AuthRoutes = () => {
+export default function App() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={Login} />
-    </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
+}

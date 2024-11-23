@@ -5,6 +5,8 @@ import { UserContext } from "../contexts/UserContext";
 import User from "../screens/User";
 import Details from "../screens/Details";
 
+
+
 export const Routes = () => {
   const { getToken, token } = useContext(UserContext);
 
