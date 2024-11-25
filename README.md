@@ -4,8 +4,6 @@ Descrição: A tela inicial do aplicativo, onde o usuário pode acessar sua cont
 Funcionalidades:
 Inserir e-mail e senha para autenticar.
 Botão de "Entrar" para acessar o sistema.
-Opção de "Esqueceu a senha" para recuperação de conta.
-Possibilidade de criar uma nova conta, caso ainda não seja cadastrado.
 2. ### Tela de Itens 
 Descrição:
 Após o login, o usuário é direcionado para a tela de listagem de produtos.
@@ -40,21 +38,10 @@ Botão "Confirmar Compra" para finalizar o pedido.
 ## Como Usar o Aplicativo
 Acesse sua conta na tela de Login.
 
-Caso não tenha uma conta, crie uma nova usando o link "Registrar".
-Navegue pelos itens disponíveis e adicione os produtos desejados ao carrinho.
-
-Revise sua compra na tela do carrinho:
+Utilize o usuario e senha da API.
 
 Ajuste as quantidades ou remova produtos, se necessário.
 Finalize a compra no Checkout:
-
 Insira os dados de pagamento e confirme o pedido.
 Aguarde a confirmação de compra e aproveite seus produtos!
 
-## Tecnologias Utilizadas
-Frontend:
-[Adicione o framework ou biblioteca, caso aplicável].
-Backend:
-[Descrição da tecnologia ou linguagem usada].
-Banco de Dados:
-[Banco de dados utilizado, se aplicável].
